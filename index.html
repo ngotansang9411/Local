@@ -1,184 +1,414 @@
 <!doctype html>
-
 <html lang="vi">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Device Optimizer — Hỗ trợ tăng độ ổn định & phản xạ (Android • iOS • Windows)</title>
+<title>Console Dev — Thông tin & Kiểm tra </title>
 <style>
-  :root{--bg:#071028;--card:#0d1530;--accent:#1fb6ff;--muted:#9fb1c8}
-  *{box-sizing:border-box;font-family:Inter,system-ui,Helvetica,Arial}
-  body{margin:0;background:linear-gradient(180deg,var(--bg),#020612);color:#eaf6ff;padding:18px}
-  .container{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:360px 1fr;gap:18px}
-  .card{background:var(--card);border-radius:12px;padding:14px;box-shadow:0 8px 30px rgba(2,6,20,0.6)}
-  h2{margin:0 0 8px 0}
-  label.small{display:block;color:var(--muted);font-size:13px;margin-top:8px}
-  .btn{background:var(--accent);color:#021325;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
-  textarea{width:100%;height:120px;background:#071029;color:#dff3ff;border-radius:8px;padding:8px;border:1px solid rgba(255,255,255,0.03)}
-  .row{display:flex;gap:8px}
-  .muted{color:var(--muted);font-size:13px}
-  .badge{background:rgba(255,255,255,0.03);padding:6px 8px;border-radius:8px;font-size:13px}
-  .section{margin-top:10px}
-  .checklist{display:flex;flex-direction:column;gap:6px;margin-top:8px}
-  .copybtn{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:6px;border-radius:8px;color:var(--muted);cursor:pointer}
-  select{width:100%;padding:6px;border-radius:6px;margin-top:6px;background:#071029;color:#dff3ff;border:1px solid rgba(255,255,255,0.08)}
-  .profile-box{background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;margin-top:10px;font-size:14px}
+  :root{
+    --bg:#0b0f14;
+    --panel:#0f1720;
+    --accent1:#ff6a00;
+    --accent2:#ffd54d;
+    --text:#e6eef6;
+    --muted:#9fb0c8;
+    --glass: rgba(255,255,255,0.03);
+    font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    min-height:100vh;
+    background: radial-gradient(1200px 600px at 10% 10%, rgba(255,106,0,0.06), transparent),
+                linear-gradient(180deg,#051018 0%, #07131b 50%, #041018 100%);
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:28px;
+  }
+
+  .container{
+    width:920px;
+    max-width:96%;
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    border:1px solid rgba(255,255,255,0.04);
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow: 0 8px 40px rgba(2,6,12,0.7);
+    display:grid;
+    grid-template-columns: 320px 1fr;
+    gap:0;
+  }
+
+  /* left menu */
+  .menu{
+    padding:18px;
+    background:
+      linear-gradient(180deg, rgba(255,106,0,0.06), rgba(255,106,0,0.02));
+    border-right:1px solid rgba(255,255,255,0.02);
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .title{
+    font-weight:700;
+    letter-spacing:1px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .logo{
+    width:44px;height:44px;border-radius:8px;
+    background:linear-gradient(135deg,var(--accent1),var(--accent2));
+    display:flex;align-items:center;justify-content:center;font-weight:800;color:#07131b;
+    box-shadow:0 4px 14px rgba(255,106,0,0.16), inset 0 -4px 18px rgba(255,255,255,0.06);
+  }
+  .version{font-size:12px;color:var(--muted)}
+
+  .tabs{
+    margin-top:8px;
+    display:flex;flex-direction:column;gap:8px;
+  }
+  .tab-btn{
+    padding:12px 14px;border-radius:8px;
+    background:transparent;border:1px solid rgba(255,255,255,0.02);
+    color:var(--text);cursor:pointer;text-align:left;font-weight:600;
+    display:flex;justify-content:space-between;align-items:center;
+    transition:all .18s;
+  }
+  .tab-btn:hover{transform:translateX(4px)}
+  .tab-btn.active{
+    background:linear-gradient(90deg, rgba(255,106,0,0.12), rgba(255,213,77,0.04));
+    box-shadow:0 6px 18px rgba(255,106,0,0.06);
+    border-color:rgba(255,106,0,0.18);
+  }
+
+  .footer-info{
+    margin-top:auto;padding-top:8px;border-top:1px dashed rgba(255,255,255,0.02);
+    font-size:13px;color:var(--muted);
+  }
+  .contact-row{display:flex;gap:8px;align-items:center;margin-top:8px}
+  .mini-btn{
+    background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.02);
+    padding:8px 10px;border-radius:8px;color:var(--text);cursor:pointer;font-weight:600;
+  }
+
+  /* main area */
+  .main{
+    padding:20px;
+    display:flex;flex-direction:column;gap:16px;
+  }
+  .panel{
+    background:var(--panel);
+    border-radius:10px;padding:16px;border:1px solid rgba(255,255,255,0.02);
+  }
+  .panel-header{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .panel-title{font-weight:700;letter-spacing:0.6px}
+  .desc{color:var(--muted);font-size:13px;margin-top:6px}
+
+  /* check area */
+  .checker{
+    display:flex;gap:16px;align-items:flex-start;
+    flex-wrap:wrap;
+  }
+  .result-box{
+    width:360px;height:360px;border-radius:8px;background:var(--glass);
+    border:1px solid rgba(255,255,255,0.03);padding:12px;overflow:auto;
+    display:flex;flex-direction:column;gap:8px;
+  }
+  .controls{display:flex;flex-direction:column;gap:10px}
+  .big-btn{
+    padding:12px 16px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--accent1),var(--accent2));
+    color:#07131b;font-weight:800;cursor:pointer;box-shadow:0 8px 30px rgba(255,106,0,0.12);
+  }
+  .second-btn{
+    padding:10px 12px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.06);
+    color:var(--text);cursor:pointer;font-weight:700;
+  }
+  .progress{
+    height:8px;background:rgba(255,255,255,0.04);border-radius:8px;overflow:hidden;margin-top:6px;
+  }
+  .progress > i{
+    display:block;height:100%;width:0;background:linear-gradient(90deg,#ffb86b,#ff6a00);
+    transition:width .3s linear;
+  }
+  pre.log{
+    white-space:pre-wrap;font-family:monospace;font-size:13px;color:#d8f0ff;margin:0;
+  }
+
+  /* small */
+  .small{font-size:12px;color:var(--muted)}
+  .hint{font-size:12px;color:var(--muted);margin-top:8px}
+
+  @media (max-width:880px){
+    .container{grid-template-columns:1fr; padding:12px;}
+    .menu{order:2;flex-direction:row;gap:6px;overflow:auto}
+    .main{order:1}
+    .result-box{width:100%;height:300px}
+  }
 </style>
 </head>
 <body>
-  <div class="container">
-    <div class="card">
-      <h2> Optimizer — Ngô Tấn Sang</h2>
-      <div class="muted">Công cụ web này KHÔNG can thiệp vào game. Nó là bộ hướng dẫn + generator (text) giúp bạn tối ưu thiết bị an toàn: Android (không root), iOS (không jailbreak) & Windows. Bạn có thể copy hướng dẫn hoặc làm theo checklist thủ công.</div><div class="section">
-    <div class="badge">Mục tiêu:</div>
-    <ul class="muted">
-      <li>Giảm độ trễ thao tác (input latency).</li>
-      <li>Tối ưu hóa FPS ổn định (giảm stutter).</li>
-      <li>Giảm rung/nhòe cảm giác khi kéo tâm.</li>
-    </ul>
+  <div class="container" role="application" aria-label="Console Dev">
+    <aside class="menu" aria-hidden="false">
+      <div class="title">
+        <div class="logo">NS</div>
+        <div>
+          <div style="font-size:16px">Console Dev</div>
+          <div class="version">Phiên bản 1.0</div>
+        </div>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Chọn tab">
+        <button class="tab-btn active" data-tab="info" role="tab" aria-selected="true">Thông tin</button>
+        <button class="tab-btn" data-tab="check" role="tab" aria-selected="false">Kiểm tra hoá</button>
+      </div>
+
+      <div class="footer-info">
+        <div>© Copyright N SANG</div>
+        <div class="contact-row">
+          <div class="small">Liên Hệ:</div>
+          <button class="mini-btn" id="copy-fb">Sao chép link Facebook</button>
+        </div>
+
+        <div class="contact-row">
+          <div class="small">Youtube:</div>
+          <a class="mini-btn" href="https://www.youtube.com/" target="_blank" rel="noopener">Mở Youtube</a>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main" aria-live="polite">
+      <!-- Thông tin -->
+      <section class="panel" id="tab-info">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">Thông tin</div>
+            <div class="desc">Thông tin liên hệ và bản quyền</div>
+          </div>
+        </div>
+
+        <div class="hint">
+          <strong>© Copyright N SANG</strong><br>
+          Liên Hệ: Nhấn "Sao chép link Facebook" để copy link. Youtube: mở kênh.
+        </div>
+      </section>
+
+      <!-- Kiểm tra hoá -->
+      <section class="panel" id="tab-check" style="display:none">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">Kiểm tra hoá</div>
+            <div class="desc">Phát hiện và in thông tin thiết bị. Không có thao tác gửi dữ liệu ra ngoài.</div>
+          </div>
+        </div>
+
+        <div class="checker" style="margin-top:12px">
+          <div class="result-box" id="result">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div class="small">Kết quả</div>
+              <div id="status" class="small">Chưa kiểm tra</div>
+            </div>
+            <div class="progress" aria-hidden="true" style="margin-top:8px">
+              <i id="progress-bar"></i>
+            </div>
+            <pre class="log" id="log">Nhấn "Kiểm tra" để bắt đầu — tiến trình khoảng 15 giây.</pre>
+          </div>
+
+          <div class="controls">
+            <button class="big-btn" id="btn-check">Kiểm tra</button>
+            <button class="second-btn" id="btn-copy">Sao chép log</button>
+
+            <div class="hint small" style="max-width:260px">
+              Lưu ý: một số thông tin cần quyền (ví dụ vị trí). Mã chỉ hiển thị và copy vào clipboard, không gửi dữ liệu đi.
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
   </div>
 
-  <div class="section">
-    <h3>Cấu hình nhanh (iOS)</h3>
-    <div class="muted">Các bước an toàn, không cần jailbreak. Tập trung giảm lag, tối ưu phản hồi cảm ứng và giữ FPS ổn định.</div>
-    <div class="checklist">
-      <label><input type="checkbox"> Tắt Background App Refresh (Cài đặt → Cài đặt chung → Làm mới ứng dụng trong nền).</label>
-      <label><input type="checkbox"> Giảm chuyển động (Cài đặt → Trợ năng → Chuyển động → Giảm chuyển động).</label>
-      <label><input type="checkbox"> Tắt hiệu ứng trong suốt / giảm trong suốt (Trợ năng → Hiển thị & Cỡ chữ → Giảm trong suốt).</label>
-      <label><input type="checkbox"> Giữ dung lượng trống > 10% bộ nhớ để tránh chậm.</label>
-      <label><input type="checkbox"> Bật Low Power Mode khi pin yếu để giảm nhiệt (nếu không cần chạy nền nhiều).</label>
-      <label><input type="checkbox"> Khởi động lại máy trước khi vào game để RAM trống hơn.</label>
-    </div>
-  </div>
-
-  <div class="section">
-    <h3>Cấu hình nhanh (Android)</h3>
-    <div class="muted">Các bước sau an toàn, không cần root. Bạn cần bật <b>Developer options</b> và <b>USB debugging</b> nếu muốn chạy ADB.</div>
-    <div class="checklist">
-      <label><input type="checkbox"> Tắt/giảm Animation (Window/Transition/Animator)</label>
-      <label><input type="checkbox"> Giảm app chạy nền (Settings → Apps → Background restriction)</label>
-      <label><input type="checkbox"> Tắt quét Wi‑Fi/Bluetooth nền</label>
-      <label><input type="checkbox"> Chọn chế độ Nguồn: Hiệu năng / High performance (nếu có)</label>
-      <label><input type="checkbox"> Bật Game Mode / GPU Turbo / HyperBoost (nếu máy hỗ trợ)</label>
-    </div>
-    <div style="margin-top:8px" class="muted">Bạn có thể nhấn nút dưới để copy các lệnh ADB an toàn (chỉ thay đổi animation). Luôn đọc chú ý trước khi dùng.</div>
-    <div style="margin-top:8px" class="row">
-      <button id="copyADB" class="btn">Copy ADB (animation tweaks)</button>
-      <button id="showMoreAndroid" class="copybtn">Chi tiết Android</button>
-    </div>
-  </div>
-
-  <div class="section">
-    <h3>Cấu hình nhanh (Windows)</h3>
-    <div class="muted">Các bước an toàn trên PC — KHÔNG chỉnh registry tự động trong công cụ này, chỉ hướng dẫn từng bước.</div>
-    <div class="checklist">
-      <label><input type="checkbox"> Cập nhật driver GPU (NVIDIA/AMD)</label>
-      <label><input type="checkbox"> Chọn Power Plan: High performance</label>
-      <label><input type="checkbox"> Tắt background apps & overlays (Discord overlay, Xbox DVR)</label>
-      <label><input type="checkbox"> Bật VSync/Adaptive Sync theo monitor (nếu muốn ổn định)</label>
-    </div>
-    <div style="margin-top:8px" class="row">
-      <button id="pcGuide" class="copybtn">Xem hướng dẫn Windows</button>
-    </div>
-  </div>
-
-  <div class="section">
-    <h3>Tips chung</h3>
-    <ul class="muted">
-      <li>Giảm độ nhạy chuột/gyro dần, tập với mỗi thay đổi 15-30 phút.</li>
-      <li>Dùng dây/adapter chất lượng nếu chơi trên thiết bị kết nối (low latency).</li>
-      <li>Giữ pin/CPU mát: tản nhiệt, tránh vừa sạc vừa chơi nếu máy quá nóng.</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h3>Profile gợi ý cài đặt trong game</h3>
-    <div class="muted">Chọn cấu hình máy của bạn để xem gợi ý cài đặt độ nhạy & setting trong Free Fire (tham khảo, tuỳ chỉnh thêm theo cảm giác cá nhân).</div>
-    <select id="profileSelect">
-      <option value="low">📱 Máy yếu (RAM < 3GB, chip đời cũ)</option>
-      <option value="mid">📱 Máy trung bình (RAM 3-4GB, chip tầm trung)</option>
-      <option value="high">📱 Máy mạnh (RAM ≥ 6GB, chip mới)</option>
-    </select>
-    <div id="profileBox" class="profile-box muted">Chọn cấu hình máy để xem gợi ý.</div>
-  </div>
-</div>
-
-<div class="card">
-  <h2>Trình tạo hướng dẫn & lệnh</h2>
-  <div class="muted">Dưới là các đoạn văn bản / lệnh bạn có thể copy — file HTML này giúp bạn copy nhanh và lưu lại.</div>
-
-  <div class="section">
-    <h3>ADB commands (animation tweaks)</h3>
-    <textarea id="adbText" readonly>--- ADB animation tweaks (an toàn, không cần root) ---
-
-Bật USB Debugging + kết nối thiết bị trước khi chạy
-
-adb devices
-
-Tắt animation để giảm độ trễ giao diện
-
-adb shell settings put global window_animation_scale 0.0 adb shell settings put global transition_animation_scale 0.0 adb shell settings put global animator_duration_scale 0.0
-
-Hoàn nguyên (nếu muốn)
-
-adb shell settings put global window_animation_scale 1.0 adb shell settings put global transition_animation_scale 1.0 adb shell settings put global animator_duration_scale 1.0 </textarea> <div style="margin-top:8px" class="row"> <button id="copyText" class="btn">Copy text</button> <button id="downloadGuide" class="copybtn">Tải hướng dẫn (.txt)</button> </div> </div>
-
-<div class="section">
-    <h3>Live checklist / Actions</h3>
-    <div class="muted">Tick các mục đã làm để theo dõi phiên tối ưu.</div>
-    <div class="checklist" id="liveChecklist">
-      <label><input type="checkbox"> Đã tắt animation</label>
-      <label><input type="checkbox"> Đã bật High performance</label>
-      <label><input type="checkbox"> Đã tắt app nền không cần thiết</label>
-      <label><input type="checkbox"> Đã test FPS trong game (min/avg)</label>
-    </div>
-  </div>
-
-  <div class="section">
-    <h3>Gợi ý kiểm tra trước khi vào trận</h3>
-    <ol class="muted">
-      <li>Khởi động lại thiết bị sau khi thay đổi (nhiều thay đổi cần reboot).</li>
-      <li>Kiểm tra nhiệt độ CPU/GPU — quá nóng gây throttling.</li>
-      <li>Chạy 1 bài test aim trainer (trong tab khác) để cảm nhận latency.</li>
-    </ol>
-  </div>
-
-</div>
-
-  </div><script>
-(function(){
-  const adbText = document.getElementById('adbText');
-  document.getElementById('copyText').addEventListener('click', ()=>{
-    navigator.clipboard.writeText(adbText.value).then(()=>alert('Đã copy ADB text'));
-  });
-  document.getElementById('copyADB').addEventListener('click', ()=>{
-    navigator.clipboard.writeText(adbText.value).then(()=>alert('Lệnh ADB (animation tweaks) đã copy. Đọc chú ý trước khi chạy.'));
-  });
-  document.getElementById('downloadGuide').addEventListener('click', ()=>{
-    const blob = new Blob([adbText.value], {type:'text/plain;charset=utf-8'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = 'adb_animation_tweaks.txt'; a.click(); URL.revokeObjectURL(url);
-  });
-  document.getElementById('showMoreAndroid').addEventListener('click', ()=>{
-    alert('Chi tiết Android:\n- Bật Developer options\n- Tắt animation (hoặc set 0.5 thử)\n- Bật Game Mode / tối ưu GPU nếu có\n- Tắt app nền không cần thiết\n- Không dùng app dọn dẹp "cleaner" tự động');
-  });
-  document.getElementById('pcGuide').addEventListener('click', ()=>{
-    alert('Windows guide:\n- Cập nhật driver GPU từ website nhà sản xuất\n- Power Options -> High performance\n- Windows Game Mode ON (thử nghiệm)\n- Tắt Xbox DVR / Game Bar overlay nếu gây lag\n- Đóng background apps trước khi chơi');
+<script>
+  // --- Tab logic ---
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.tab-btn').forEach(b=>{
+        b.classList.remove('active'); b.setAttribute('aria-selected','false');
+      });
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      const tab = btn.dataset.tab;
+      document.getElementById('tab-info').style.display = tab === 'info' ? '' : 'none';
+      document.getElementById('tab-check').style.display = tab === 'check' ? '' : 'none';
+    });
   });
 
-  const profileBox = document.getElementById('profileBox');
-  document.getElementById('profileSelect').addEventListener('change', (e)=>{
-    const val = e.target.value;
-    let text = '';
-    if(val==='low'){
-      text = '📱 Máy yếu:\n- Đồ họa: Mượt\n- FPS: Thấp/Trung bình\n- Độ nhạy tổng: 95-100\n- Red Dot: 85-90\n- 2X: 80\n- 4X: 70\n- AWM: 50\n- Gyro: Tắt (nếu có lag)';
-    } else if(val==='mid'){
-      text = '📱 Máy trung bình:\n- Đồ họa: Cân bằng\n- FPS: Cao\n- Độ nhạy tổng: 90-95\n- Red Dot: 80-85\n- 2X: 75-80\n- 4X: 65-70\n- AWM: 45-50\n- Gyro: Bật nếu quen tay';
-    } else {
-      text = '📱 Máy mạnh:\n- Đồ họa: Cao/Siêu cao\n- FPS: Cao\n- Độ nhạy tổng: 85-90\n- Red Dot: 75-80\n- 2X: 70-75\n- 4X: 60-65\n- AWM: 40-45\n- Gyro: Bật, dùng để kéo tâm mượt hơn';
+  // --- Copy facebook link ---
+  const fbLink = "https://facebook.com/your.profile"; // <-- chỉnh theo ý bạn
+  document.getElementById('copy-fb').addEventListener('click', async ()=>{
+    try{
+      await navigator.clipboard.writeText(fbLink);
+      document.getElementById('copy-fb').textContent = 'Đã sao chép ✓';
+      setTimeout(()=> document.getElementById('copy-fb').textContent = 'Sao chép link Facebook',1400);
+    }catch(e){
+      alert('Không thể sao chép — trình duyệt không cho phép clipboard.');
     }
-    profileBox.textContent = text;
   });
-})();
-</script></body>
+
+  // --- Device info collector ---
+  async function collectDeviceInfo(){
+    const info = {};
+    try{
+      // Basic navigator
+      info.userAgent = navigator.userAgent || null;
+      info.platform = navigator.platform || null;
+      info.vendor = navigator.vendor || null;
+      info.language = navigator.language || null;
+      info.languages = navigator.languages || null;
+      info.cookieEnabled = navigator.cookieEnabled || null;
+      info.onLine = navigator.onLine || null;
+      info.hardwareConcurrency = navigator.hardwareConcurrency || null;
+      // deviceMemory may be undefined in many browsers
+      info.deviceMemory = navigator.deviceMemory || null;
+
+      // Screen
+      info.screen = {
+        width: screen.width,
+        height: screen.height,
+        availWidth: screen.availWidth,
+        availHeight: screen.availHeight,
+        colorDepth: screen.colorDepth,
+        pixelDepth: screen.pixelDepth,
+        orientation: (screen.orientation && screen.orientation.type) ? screen.orientation.type : null
+      };
+
+      // Timezone & time
+      info.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || null;
+      info.localTime = new Date().toString();
+      info.timezoneOffsetMinutes = new Date().getTimezoneOffset();
+
+      // Battery (may need Promise)
+      if (navigator.getBattery){
+        try{
+          const b = await navigator.getBattery();
+          info.battery = {
+            charging: b.charging,
+            level: b.level,
+            chargingTime: b.chargingTime,
+            dischargingTime: b.dischargingTime
+          };
+        }catch(e){
+          info.battery = null;
+        }
+      } else {
+        info.battery = null;
+      }
+
+      // Connection (Network Information API)
+      info.connection = (navigator.connection) ? {
+        effectiveType: navigator.connection.effectiveType || null,
+        downlink: navigator.connection.downlink || null,
+        rtt: navigator.connection.rtt || null
+      } : null;
+
+      // Permissions and optional geolocation
+      info.permissions = {};
+      if (navigator.permissions){
+        try{
+          const perms = ['geolocation','clipboard-read','notifications','camera','microphone'];
+          for (const p of perms){
+            try{
+              const status = await navigator.permissions.query({name: p});
+              info.permissions[p] = status.state;
+            }catch(e){
+              info.permissions[p] = 'unavailable';
+            }
+          }
+        }catch(e){
+          // ignore
+        }
+      }
+
+      // Geolocation: ask user (optional). If user denies, we record that.
+      info.geolocation = null;
+      if (navigator.geolocation){
+        // We'll request once with a short timeout
+        const pos = await new Promise((resolve)=>{
+          let resolved = false;
+          const success = (p)=> { if(!resolved){resolved=true; resolve({lat:p.coords.latitude, lon:p.coords.longitude, accuracy:p.coords.accuracy}) } };
+          const fail = (err)=> { if(!resolved){resolved=true; resolve({error: err.message || err.code || 'denied'});} };
+          navigator.geolocation.getCurrentPosition(success, fail, {timeout:8000, maximumAge:60000});
+          // fallback timeout
+          setTimeout(()=>{ if(!resolved){resolved=true; resolve({error:'timeout'});} },9000);
+        });
+        info.geolocation = pos;
+      }
+
+      // A few derived fields (example email-note — displayed as text only)
+      info.note = "";
+      info.checkTime = new Date().toISOString();
+
+    }catch(e){
+      info._error = String(e);
+    }
+    return info;
+  }
+
+  // --- UI: simulate 15s load & show result ---
+  const btnCheck = document.getElementById('btn-check');
+  const progressBar = document.getElementById('progress-bar');
+  const logEl = document.getElementById('log');
+  const statusEl = document.getElementById('status');
+
+  btnCheck.addEventListener('click', async ()=>{
+    btnCheck.disabled = true;
+    statusEl.textContent = 'Đang kiểm tra...';
+    logEl.textContent = 'Bắt đầu kiểm tra — Vui lòng chờ khoảng 15 giây...';
+    progressBar.style.width = '0%';
+
+    // simulate progress over ~15s while also collecting some async info
+    const totalMs = 15000;
+    const start = Date.now();
+    let percent = 0;
+    const interval = setInterval(()=>{
+      const elapsed = Date.now() - start;
+      percent = Math.min(100, Math.round((elapsed/totalMs)*100));
+      progressBar.style.width = percent + '%';
+    }, 250);
+
+    // start collecting info in parallel (some ops may finish earlier)
+    const infoPromise = collectDeviceInfo();
+
+    // ensure at least totalMs delay so user sees loading
+    await new Promise(r => setTimeout(r, totalMs));
+
+    clearInterval(interval);
+    progressBar.style.width = '100%';
+
+    const info = await infoPromise;
+    statusEl.textContent = 'Hoàn tất';
+    // Pretty print JSON with colors? Use monospace pre
+    const pretty = JSON.stringify(info, null, 2);
+    logEl.textContent = pretty;
+
+    btnCheck.disabled = false;
+  });
+
+  // --- Copy log button ---
+  document.getElementById('btn-copy').addEventListener('click', async ()=>{
+    try{
+      const text = document.getElementById('log').textContent;
+      await navigator.clipboard.writeText(text);
+      document.getElementById('btn-copy').textContent = 'Đã sao chép ✓';
+      setTimeout(()=> document.getElementById('btn-copy').textContent = 'Sao chép log',1400);
+    }catch(e){
+      alert('Không thể sao chép — trình duyệt không cho phép clipboard.');
+    }
+  });
+
+  // Accessibility: allow Enter on the large button
+  btnCheck.addEventListener('keyup', (e)=>{ if(e.key === 'Enter') btnCheck.click(); });
+
+</script>
+</body>
 </html>
